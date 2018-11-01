@@ -1,0 +1,28 @@
+{
+  "name": "blogcli-server",
+  "version": "1.0.0",
+  "description": "for blgcli's server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerowss/blogcli-server.git"
+  },
+  "author": "wss",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zerowss/blogcli-server/issues"
+  },
+  "homepage": "https://github.com/zerowss/blogcli-server#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.2",
+    "koa": "^2.6.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa2-cors": "^2.0.6",
+    "mongoose": "^5.3.7",
+    "uuid": "^3.3.2"
+  }
+}
