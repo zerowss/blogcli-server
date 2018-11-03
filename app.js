@@ -2,28 +2,22 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-10-31 19:38:23
+ * @Last Modified time: 2018-11-03 14:02:06
  */
 
 const Koa = require('koa');
 const config = require('./config/config');
 
 const cors = require('koa2-cors');
-const bodyParser = require('koa-bodyparser');
+const koaBody = require('koa-body');
 const mongoose = require('mongoose');
 
 const app = new Koa();
+app.use(cors());
+app.use(koaBody());
 
-const options = {
-    useMongoClient: true,
-    autoIndex: false, // Don't build indexes
-    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
-    reconnectInterval: 500, // Reconnect every 500ms
-    poolSize: 10, // Maintain up to 10 socket connections
-    // If not connected, return errors immediately rather than waiting for reconnect
-    bufferMaxEntries: 0
-  };
-mongoose.connect(config.db,options,(err)=>{
+console.log(config.db,'ss');
+mongoose.connect(config.db,{useNewUrlParser: true},(err)=>{
     if (err) {
         console.error('Failed to connect to db');
     } else {
@@ -31,13 +25,15 @@ mongoose.connect(config.db,options,(err)=>{
     }
 });
 
-app.use(cors());
-app.use(bodyParser());
 
 
+const example_router = require('./routers/api/example_router');
+app.use(example_router.routes()).use(example_router.allowedMethods());
 
 
+app.listen(config.prot,()=>{
+    console.error(`服务器启动成功：localhost:${config.prot}`);
+});
 
 
-app.listen(config.port);
 
