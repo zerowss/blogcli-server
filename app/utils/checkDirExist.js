@@ -11,4 +11,8 @@
     }
  }
 
- module.exports = checkDirExist; 
+ module.exports = {
+    checkDirExist
+ }; 
+
+ 

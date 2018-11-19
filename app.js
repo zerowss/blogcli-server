@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-11-06 16:16:53
+ * @Last Modified time: 2018-11-19 13:43:48
  */
 const path = require('path');
 const Koa = require('koa');
@@ -12,9 +12,9 @@ const cors = require('koa2-cors');
 const koaBody = require('koa-body');
 const mongoose = require('mongoose');
 
-import getUploadFileExt from './app/utils/getUploadFileExt';
-import checkDirExist from './app/utils/checkDirExist';
-import getUploadDirName from './app/utils/getUploadDirName';
+const getUploadFileExt = require('./app/utils/getUploadFileExt');
+const checkDirExist = require('./app/utils/checkDirExist');
+const getUploadDirName = require('./app/utils/getUploadDirName'); 
 
 const app = new Koa();
 app.use(cors());

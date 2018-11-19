@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-06 11:06:31 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-11-06 13:38:54
+ * @Last Modified time: 2018-11-19 13:41:42
  */
 
  
@@ -13,4 +13,7 @@ let getUploadDirName = ()=>{
     return `${date.getFullYear()}${month}${date.getDate()}`;
 }
 
-module.exports = getUploadDirName; 
+module.exports = {
+    getUploadDirName
+}; 
+
