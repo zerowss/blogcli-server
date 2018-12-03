@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start ecosystem.config.js",
     "build": "pm2 deploy production update",
-    "production": "pm2 deploy production setup" 
+    "production": "pm2 deploy production setup"
   },
   "repository": {
     "type": "git",
@@ -21,9 +21,11 @@
   "homepage": "https://github.com/zerowss/blogcli-server#readme",
   "dependencies": {
     "bcrypt": "^3.0.2",
+    "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.1",
     "koa-body": "^4.0.4",
     "koa-bodyparser": "^4.2.1",
+    "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.6",
     "mongoose": "^5.3.7",

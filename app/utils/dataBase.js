@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-06 17:31:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-11-06 20:51:58
+ * @Last Modified time: 2018-11-28 09:39:35
  */
 
 /**
@@ -14,18 +14,21 @@
  */
 const addData = (model, conditions, callback) => {
     model.create(conditions, function (err, result) {
+        console.log(result,'result');
         if (err) {
             console.log(err);
             callback({
                 success: 0,
                 flag: "save data fail",
-                err: err
+                err: err,
+                result: result
             });
         } else {
             console.log('save success');
             callback({
                 success: 1,
-                flag: "save data success"
+                flag: "save data success",
+                result: result
             });
         }
     })
@@ -205,6 +208,20 @@ const findDataPopulation = (model, conditions, path, fields, refmodel, options, 
         }
     });
 }
+/**
+ * 自增id
+ * @param {*} sequenceName
+ * @returns
+ */
+const getNextSequenceValue = (sequenceName)=>{
+    let sequenceDocument = db.counters.findAndModify(
+        {
+           query:{_id: sequenceName },
+           update: {$inc:{sequence_value:1}},
+           "new":true
+        });
+     return sequenceDocument.sequence_value;
+}
 
 module.exports = {
     addData,
@@ -212,5 +229,6 @@ module.exports = {
     updateData,
     removeData,
     findData,
-    findDataPopulation
+    findDataPopulation,
+    getNextSequenceValue
 };
