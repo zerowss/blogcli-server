@@ -1,18 +1,18 @@
 module.exports = {
   apps : [{
-    name: 'API',
+    name: 'app',
     script: 'app.js',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
-    autorestart: false,
+    autorestart: true,
     env: {
       NODE_ENV: 'development'
     },
     env_production: {
       NODE_ENV: 'production'
-    }
+    },
+    watch:true
   }],
-
   deploy : {
     production : {
       user : 'root',
