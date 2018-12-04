@@ -4,7 +4,7 @@ module.exports = {
     script: 'app.js',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
-    autorestart: true,
+    autorestart: false,
     env: {
       NODE_ENV: 'development'
     },
