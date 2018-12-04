@@ -20,7 +20,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:zerowss/blogcli-server.git',
       path : '/workspace/blgcli-server',
-      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'rm -rf node_modules && npm install && pm2 reload ecosystem.config.js --env production'
     }
   }
 };
