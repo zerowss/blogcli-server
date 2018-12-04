@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-12-03 17:11:28
+ * @Last Modified time: 2018-12-04 09:09:55
  */
 const path = require('path');
 const Koa = require('koa');
@@ -52,6 +52,7 @@ app.use(koajwt({
 }).unless({
     path: [/\/register/, /\/login/]
 }));
+
 console.log(config.db,'ss');
 mongoose.connect(config.db,{useNewUrlParser: true},(err)=>{
     if (err) {
