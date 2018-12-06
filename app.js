@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-12-04 09:09:55
+ * @Last Modified time: 2018-12-06 13:37:38
  */
 const path = require('path');
 const Koa = require('koa');
@@ -58,7 +58,7 @@ mongoose.connect(config.db,{useNewUrlParser: true},(err)=>{
     if (err) {
         console.error('Failed to connect to db');
     } else {
-        console.log('Connecting db successfully')
+        console.log('Connecting db successfully');
     }
 });
 

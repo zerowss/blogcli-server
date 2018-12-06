@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-12-03 15:11:17
+ * @Last Modified time: 2018-12-06 10:15:14
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -19,7 +19,6 @@ const config = require('../../../config/config');
 
 const login =  async(ctx) => {
   const data = ctx.request.body;
-  console.log(data,'data--');
   if (!data.username || !data.password) {
     ctx.status = 400;
     ctx.body = {
@@ -33,28 +32,27 @@ const login =  async(ctx) => {
       username: data.username
     })
     if (!userInfo) {
-      ctx.status = 401
+      ctx.status = 200
       ctx.body = {
-        message: '用户名错误',
+        desc: '用户名不存在',
         code: -100
       }
-      return;
+      return
     }
     // 匹配密码是否相等
     if (await bcrypt.compare(data.password, userInfo.password)) {
       ctx.status = 200;
       ctx.body = {
         code: 0,
-        message: '登录成功',
         data: userInfo,
         token: jsonwebtoken.sign({
           data: userInfo
         }, config.secret,{expiresIn: '1h'})
       }
     } else {
-      ctx.status = 401
+      ctx.status = 200
       ctx.body = {
-        message: '密码错误',
+        desc: '密码错误',
         code: -100
       }
     }
@@ -84,9 +82,9 @@ const register = async (ctx)=> {
       username: data.username
     });
     if(userInfo.length){
-      ctx.status = 406;
+      ctx.status = 200;
       ctx.body = {
-        message: '用户名已经存在',
+        desc: '用户名已经存在',
         code: -100
       }
       return;
@@ -94,7 +92,6 @@ const register = async (ctx)=> {
       let user = await User_col.create(data);
       ctx.status = 200;
       ctx.body = {
-        message: '注册成功',
         data: user,
         code: 0
       }

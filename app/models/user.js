@@ -2,14 +2,14 @@
  * @Author: wangss 
  * @Date: 2018-11-01 10:24:52 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-11-28 14:29:06
+ * @Last Modified time: 2018-12-06 13:36:23
  */
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const counters = require('./counters');
 const userSchema = new Schema(
     {
-        userId: {
+        id: {
             type: String,
             index: true,
             unique: true
@@ -42,12 +42,20 @@ const userSchema = new Schema(
         }
     }
 );
-
 userSchema.virtual('userInfo').get(() => {
     return {
         username: this.username,
         pwd: this.pwd
     }
 })
-userSchema.index({ userId: 1 });
+userSchema.pre('save',function(next){
+   var doc = this;
+   counters.findByIdAndUpdate({_id: 'entityId'}, {$inc: { seq: 1} },{ new: true, upsert: true },function(error, counter) {
+       if (error) {
+        return next(error);
+       }
+       doc.id = counter.seq;
+       next();
+   })
+})
 module.exports = mongoose.model('user', userSchema);

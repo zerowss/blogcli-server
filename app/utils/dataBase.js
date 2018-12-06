@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-06 17:31:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-11-28 09:39:35
+ * @Last Modified time: 2018-12-06 11:01:00
  */
 
 /**
@@ -208,20 +208,7 @@ const findDataPopulation = (model, conditions, path, fields, refmodel, options, 
         }
     });
 }
-/**
- * 自增id
- * @param {*} sequenceName
- * @returns
- */
-const getNextSequenceValue = (sequenceName)=>{
-    let sequenceDocument = db.counters.findAndModify(
-        {
-           query:{_id: sequenceName },
-           update: {$inc:{sequence_value:1}},
-           "new":true
-        });
-     return sequenceDocument.sequence_value;
-}
+
 
 module.exports = {
     addData,
@@ -229,6 +216,5 @@ module.exports = {
     updateData,
     removeData,
     findData,
-    findDataPopulation,
-    getNextSequenceValue
+    findDataPopulation
 };
