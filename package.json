@@ -2,12 +2,13 @@
   "name": "blogcli-server",
   "version": "1.0.0",
   "description": "for blgcli's server",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "build": "rm -rf dist && babel src -d dist && babel app.js -d dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start ecosystem.config.js",
-    "build": "pm2 deploy production update",
-    "production": "pm2 deploy production setup"
+    "build-update": "npm run build && pm2 deploy production update",
+    "build-production": "pm2 deploy production setup"
   },
   "repository": {
     "type": "git",
@@ -25,10 +26,17 @@
     "koa": "^2.6.1",
     "koa-body": "^4.0.4",
     "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0",
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
     "koa2-cors": "^2.0.6",
     "mongoose": "^5.3.7",
+    "nodemailer": "^5.0.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }

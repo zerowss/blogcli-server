@@ -2,26 +2,49 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-12-06 13:37:38
+ * @Last Modified time: 2019-01-04 15:30:43
  */
 const path = require('path');
 const Koa = require('koa');
-const config = require('./config/config');
+const config = require('./src/config/config');
 const koajwt = require('koa-jwt');
 const cors = require('koa2-cors');
-const koaBody = require('koa-body');
+// const koaBody = require('koa-body');
+const koaStatic = require('koa-static');
 const bodyParser = require('koa-bodyparser');
+const compose = require('koa-compose');
 const mongoose = require('mongoose');
 
-const getUploadFileExt = require('./app/utils/getUploadFileExt');
-const checkDirExist = require('./app/utils/checkDirExist');
-const getUploadDirName = require('./app/utils/getUploadDirName'); 
+console.log(config.db, '数据库');
+mongoose.connect(config.db, {
+    useNewUrlParser: true
+}, (err) => {
+    if (err) {
+        console.error('Failed to connect to db');
+    } else {
+        console.log('Connecting db successfully');
+    }
+});
 
-const errorHandle = require('./app/middlewares/errorhandle');
+const getUploadFileExt = require('./src/app/utils/getUploadFileExt');
+const checkDirExist = require('./src/app/utils/checkDirExist');
+const getUploadDirName = require('./src/app/utils/getUploadDirName'); 
 
+const errorHandle = require('./src/app/middlewares/errorhandle');
 const app = new Koa();
-app.use(cors());
-app.use(bodyParser());
+const staticPath = './static';
+app.use(koajwt({
+    secret: config.secret
+}).unless({
+    path: [/\/register/, /\/login/, /\/getEmailCode/]
+}));
+const middlewares = compose([
+    cors(),
+    errorHandle,
+    bodyParser(),
+    koaStatic(__dirname + staticPath)
+]);
+app.use(middlewares);
 // app.use(koaBody({
 //     multipart:true,
 //     encoding:'gzip',
@@ -46,29 +69,12 @@ app.use(bodyParser());
 //     }
 // }));
 
-app.use(errorHandle);
-app.use(koajwt({
-    secret: config.secret 
-}).unless({
-    path: [/\/register/, /\/login/]
-}));
 
-console.log(config.db,'ss');
-mongoose.connect(config.db,{useNewUrlParser: true},(err)=>{
-    if (err) {
-        console.error('Failed to connect to db');
-    } else {
-        console.log('Connecting db successfully');
-    }
-});
+const routerList = require('./src/routers/index');
 
-
-
-const example_router = require('./routers/api/example_router');
-const user_router = require('./routers/api/user_router');
-app.use(example_router.routes()).use(example_router.allowedMethods());
-app.use(user_router.routes()).use(user_router.allowedMethods());
-
+Object.keys(routerList).forEach(key=>{
+   app.use(routerList[key].routes()).use(routerList[key].allowedMethods());
+})
 
 app.listen(config.prot,()=>{
     console.error(`服务器启动成功：localhost:${config.prot}`);
