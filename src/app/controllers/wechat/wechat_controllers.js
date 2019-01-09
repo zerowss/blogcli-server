@@ -37,6 +37,7 @@ class wechat {
         }
     }
 
+    
     // 二维码上用于跳转的url,需要二次跳转
     async weChatLogin(ctx) {
         const state = Tool.encryption(stateKey);
