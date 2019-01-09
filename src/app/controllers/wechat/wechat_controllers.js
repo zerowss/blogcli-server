@@ -27,6 +27,10 @@ class wechat {
         const sha1 = crypto.createHash('sha1');
         sha1.update(arr);
         const result = sha1.digest('hex');
+        console.log('===',data);
+        console.log('---',result);
+        
+        
         if (result === signature) {
             ctx.body = echostr;
         }else{
@@ -37,7 +41,7 @@ class wechat {
         }
     }
 
-    
+
     // 二维码上用于跳转的url,需要二次跳转
     async weChatLogin(ctx) {
         const state = Tool.encryption(stateKey);
