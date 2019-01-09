@@ -6,10 +6,10 @@ module.exports = {
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     autorestart: true,
     env: {
-      NODE_ENV: 'development'
+      "COMMON_VARIABLE": "true"
     },
     env_production: {
-      NODE_ENV: 'production'
+      "NODE_ENV": "production"
     },
     watch:true
   }],
