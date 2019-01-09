@@ -18,7 +18,7 @@ class wechat {
     }
 
     async checkToken(ctx){
-        const data = ctx.querst.query;
+        const data = ctx.query;
         let signature = data.signature,
             timestamp = data.timestamp,
             nonce = data.nonce,
