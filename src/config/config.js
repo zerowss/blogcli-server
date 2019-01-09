@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 19:55:53 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-08 17:56:09
+ * @Last Modified time: 2019-01-09 16:47:12
  */
 
  module.exports = {
@@ -19,8 +19,8 @@
         }
      },
      weChat:{
-        appID: 'wxd90392c7c17a8896',
-        appsecret: 'c8cce8747e7424afa196cddd8b2fa4f8',
+        appID: 'wx92b656d00b7d3bcc',
+        appsecret: 'fae72ebc4b64700b93dcf973b37e8edd',
         token: 'zerosnail2019'
      }
  };
