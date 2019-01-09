@@ -3,6 +3,7 @@ const weChatToken_col = require('../../models/wechat');
 const OAuth = require('wechat-oauth');
 const Tool = require('../../utils/tool');
 const { login } = require('./../user/user_controllers');
+const crypto = require('crypto');
 
 let appID = config.weChat.appID;
 let AppSecret = config.weChat.appsecret;
@@ -16,10 +17,30 @@ class wechat {
         console.log('sss',config);
     }
 
+    async checkToken(ctx){
+        const data = ctx.querst.query;
+        let signature = data.signature,
+            timestamp = data.timestamp,
+            nonce = data.nonce,
+            echostr = data.echostr;
+        const arr = [token, timestamp, nonce].sort().join('');
+        const sha1 = crypto.createHash('sha1');
+        sha1.update(arr);
+        const result = sha1.digest('hex');
+        if (result === signature) {
+            ctx.body = echostr;
+        }else{
+            ctx.body = {
+                code: -1,
+                msg: "fail"
+            };
+        }
+    }
+
     // 二维码上用于跳转的url,需要二次跳转
     async weChatLogin(ctx) {
         const state = Tool.encryption(stateKey);
-        url = client.getAuthorizeURLForWebsite('/wechat/getToken', state, 'snsapi_userinfo');
+        url = client.getAuthorizeURLForWebsite('/wechat/getToken', state, 'snsapi_login');
         ctx.response.redirect(url);
     }
     //二次跳转的url 获取code,state

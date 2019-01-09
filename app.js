@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 20:05:06 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-08 17:45:38
+ * @Last Modified time: 2019-01-09 14:50:39
  */
 const path = require('path');
 const Koa = require('koa');
@@ -36,7 +36,7 @@ const staticPath = './static';
 app.use(koajwt({
     secret: config.secret
 }).unless({
-    path: [/\/register/, /\/login/, /\/getEmailCode/, /\/isSameName/, /\/wechat\/redirect/, /\/wechat\/getToken /]
+    path: [/\/register/, /\/login/, /\/getEmailCode/, /\/isSameName/, /\/wechat\/redirect/, /\/wechat\/getToken/, /\/checkToken/]
 }));
 const middlewares = compose([
     cors(),
