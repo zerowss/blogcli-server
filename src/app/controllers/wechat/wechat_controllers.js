@@ -46,7 +46,16 @@ class wechat {
     async weChatLogin(ctx) {
         const state = Tool.encryption(stateKey);
         url = client.getAuthorizeURLForWebsite('/wechat/getToken', state, 'snsapi_login');
-        ctx.response.redirect(url);
+        // ctx.response.redirect(url);
+        console.log('-',url);
+        
+        ctx.status = 200;
+        ctx.body = {
+            data:{
+                url: url
+            },
+            code: 0
+        }
     }
     //二次跳转的url 获取code,state
     async get_wx_access_token(ctx) {
