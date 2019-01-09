@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-01 10:24:52 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-04 10:56:19
+ * @Last Modified time: 2019-01-08 09:49:17
  */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -58,11 +58,6 @@ userSchema.pre('save',function(next){
         return next(error);
        }
        doc.id = counter.seq;
-       if (this.isNew) {
-           this.meta.createdAt = this.meta.updatedAt = Date.now()
-       } else {
-           this.meta.updatedAt = Date.now()
-       }
        next();
    })
 })

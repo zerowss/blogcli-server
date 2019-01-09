@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-04 15:47:39
+ * @Last Modified time: 2019-01-08 17:37:47
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -10,6 +10,7 @@ const EmailCode_col = require('../../models/emailcode');
 const jsonwebtoken = require('jsonwebtoken');
 const config = require('../../../config/config');
 const Tool = require('../../utils/tool');
+const nodemail = require("../../middlewares/nodemailer");
 /**
  *
  *  登录
@@ -68,7 +69,7 @@ const login =  async(ctx) => {
  * @memberof loginCollore
  */
 const register = async (ctx)=> {
-  const data = ctx.request.body;
+  const data = ctx.request ? ctx.request.body: ctx;
   try {
     if (!data.username || !data.password) {
       ctx.status = 400;
@@ -90,22 +91,31 @@ const register = async (ctx)=> {
       }
       return;
     }else{
-      let emailInfo = await EmailCode_col.findOne({
+      let emailInfo = await EmailCode_col.find({
         username: data.username,
         email : data.email
       })
-      if(emailInfo.codeEmail == data.code){
-        let user = await User_col.create(data);
-        ctx.status = 200;
-        ctx.body = {
-          data: 'success',
-          code: 0
+      const nowDate = +new Date(); //获取当前时间
+      if (emailInfo && emailInfo.codeEmail == data.code ) {
+        if (emailInfo.time - nowDate < 600000) {
+          await User_col.create(data);
+          ctx.status = 200;
+          ctx.body = {
+            data: 'success',
+            code: 0
+          }
+        }else{
+          ctx.status = 200;
+          ctx.body = {
+            data: '验证码已超时，请重新获取',
+            code: -100
+          }
         }
       }else{
         ctx.status = 200;
         ctx.body = {
           data: '验证码输入错误',
-          code: 0
+          code: -100
         }
       }
     }
@@ -121,15 +131,13 @@ const register = async (ctx)=> {
  * @returns
  */
 const getEmailCode = async (ctx)=>{
-  let data = ctx.request;
-  const time = new Date();
-  // data.codeEmail = Tool.randomNumber(6);
-  console.log('c',data);
-  
-  let nameResult = await User_col.findOne({
+  let data = ctx.request.body;
+  data.time = +new Date();
+  data.codeEmail = Tool.randomNumber(6);
+  let nameResult = await User_col.find({
     username: data.username
   });
-  let emailResult = await User_col.findOne({
+  let emailResult = await User_col.find({
     email: data.email
   })
   
@@ -139,7 +147,6 @@ const getEmailCode = async (ctx)=>{
       desc: result.length ? '用户名已经存在': '邮箱已被注册',
       code: -100
     }
-    return;
   }else{
     ctx.status = 200;
     ctx.body = {
@@ -149,34 +156,54 @@ const getEmailCode = async (ctx)=>{
     let mail = {
       // 发件人
       from: '<wsskk_top@163.com>',
-        // 主题
-        subject: '接受凭证', //邮箱主题
-        // 收件人
-        to: data.email, //前台传过来的邮箱
-        // 邮件内容，HTML格式
-        text: '用' + data.codeEmail + '作为你的验证码' //发送验证码
+      // 主题
+      subject: '接受凭证', //邮箱主题
+      // 收件人
+      to: data.email, //前台传过来的邮箱
+      // 邮件内容，HTML格式
+      text: '用' + data.codeEmail + '作为你的验证码' //发送验证码
     }
-    await EmailCode_col.create(data);
+    let emailR = await EmailCode_col.find({
+      email: data.email
+    })
+    if (emailR && emailR.length) {
+      await EmailCode_col.update(
+        {email: data.email},
+        {codeEmail: data.codeEmail},
+        (err, res) => {
+          if (err) {
+            console.error("Error: " + err);
+          } else {
+            console.log("Res: " + res);
+          }
+        });
+    }else{
+      await EmailCode_col.create(data);
+    }
     await nodemail(mail); //发送邮件
   }
 }
 
 const isSameName = async ctx=>{
-  const data = ctx.request.body;
-  let nameResult = await User_col.findOne({
+  const data = ctx.request.query;
+  let nameResult = await User_col.find({
     username: data.username
   });
-  if (nameResult.length) {
+  if (nameResult && nameResult.length) {
     ctx.status = 200;
     ctx.body = {
-      desc: '用户名已经存在',
-      code: -100
+      code: 0,
+      data: {
+        status: -1
+      }
     }
   }else{
     ctx.status = 200;
     ctx.body = {
-      desc: 'success',
-      code: 0
+      code: 0,
+      data:{
+        status: 1
+      }
     }
   }
 }

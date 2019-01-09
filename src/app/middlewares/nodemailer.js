@@ -8,7 +8,8 @@ const transporter = nodemailer.createTransport(config.nodemailer);
 module.exports = mail=> {
     transporter.sendMail(mail, (error, info)=> {
         if (error) {
-            return console.log(error);
+            console.log(error);
+            return error;
         }
         console.log('mail sent:', info.response);
     });
