@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-10 15:08:34
+ * @Last Modified time: 2019-01-10 15:34:33
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -101,7 +101,7 @@ const register = async (ctx)=> {
     })
     const nowDate = +new Date(); //获取当前时间
     if (emailInfo && emailInfo.codeEmail == data.code) {
-      if (emailInfo.time - nowDate < 600000) {
+      if (nowDate - emailInfo.time < 600000) {
         await User_col.create(data);
         ctx.status = 200;
         ctx.body = {
