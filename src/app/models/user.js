@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-01 10:24:52 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-08 09:49:17
+ * @Last Modified time: 2019-01-10 14:09:28
  */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -29,9 +29,6 @@ const userSchema = new Schema(
             type: String
         },
         sex: {
-            type: String
-        },
-        codeEmail: {
             type: String
         }
     }, 

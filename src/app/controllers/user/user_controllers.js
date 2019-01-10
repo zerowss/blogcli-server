@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-10 14:00:24
+ * @Last Modified time: 2019-01-10 14:51:10
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -104,20 +104,20 @@ const register = async (ctx)=> {
           await User_col.create(data);
           ctx.status = 200;
           ctx.body = {
-            data: 'success',
+            desc: 'success',
             code: 0
           }
         }else{
           ctx.status = 200;
           ctx.body = {
-            data: '验证码已超时，请重新获取',
+            desc: '验证码已超时，请重新获取',
             code: -100
           }
         }
       }else{
         ctx.status = 200;
         ctx.body = {
-          data: '验证码输入错误',
+          desc: '验证码输入错误',
           code: -100
         }
       }
