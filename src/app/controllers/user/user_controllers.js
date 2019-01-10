@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-10 13:50:50
+ * @Last Modified time: 2019-01-10 14:00:24
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -91,7 +91,7 @@ const register = async (ctx)=> {
       }
       return;
     }else{
-      let emailInfo = await EmailCode_col.find({
+      let emailInfo = await EmailCode_col.findOne({
         $and:[
           {username: data.username},
           {email : data.email}
