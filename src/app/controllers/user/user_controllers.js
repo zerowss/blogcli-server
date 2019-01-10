@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-10 14:51:10
+ * @Last Modified time: 2019-01-10 15:08:34
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -83,6 +83,7 @@ const register = async (ctx)=> {
     const userInfo = await User_col.find({
       username: data.username
     });
+    
     if(userInfo.length){
       ctx.status = 200;
       ctx.body = {
@@ -90,36 +91,35 @@ const register = async (ctx)=> {
         code: -100
       }
       return;
-    }else{
-      let emailInfo = await EmailCode_col.findOne({
-        $and:[
-          {username: data.username},
-          {email : data.email}
-        ]
-      })
-      console.log('ss',emailInfo);
-      const nowDate = +new Date(); //获取当前时间
-      if (emailInfo && emailInfo.codeEmail == data.code ) {
-        if (emailInfo.time - nowDate < 600000) {
-          await User_col.create(data);
-          ctx.status = 200;
-          ctx.body = {
-            desc: 'success',
-            code: 0
-          }
-        }else{
-          ctx.status = 200;
-          ctx.body = {
-            desc: '验证码已超时，请重新获取',
-            code: -100
-          }
-        }
-      }else{
+    }
+
+    let emailInfo = await EmailCode_col.findOne({
+      $and: [
+        {username: data.username},
+        {email: data.email}
+      ]
+    })
+    const nowDate = +new Date(); //获取当前时间
+    if (emailInfo && emailInfo.codeEmail == data.code) {
+      if (emailInfo.time - nowDate < 600000) {
+        await User_col.create(data);
         ctx.status = 200;
         ctx.body = {
-          desc: '验证码输入错误',
+          desc: 'success',
+          code: 0
+        }
+      } else {
+        ctx.status = 200;
+        ctx.body = {
+          desc: '验证码已超时，请重新获取',
           code: -100
         }
+      }
+    } else {
+      ctx.status = 200;
+      ctx.body = {
+        desc: '请通过邮箱验证后注册',
+        code: -100
       }
     }
   }
@@ -165,7 +165,14 @@ const getEmailCode = async (ctx)=>{
       // 收件人
       to: data.email, //前台传过来的邮箱
       // 邮件内容，HTML格式
-      text: '用' + data.codeEmail + '作为你的验证码' //发送验证码
+      // text: '用' + data.codeEmail + '作为你的验证码', //发送验证码
+      html: `
+        <p>你好<p>
+        <p>感谢注册zero管理平台<p>
+        <p>你的登录邮箱为：${data.email}。请回填如下6位验证码：<p>
+        <p>${data.codeEmail}</p>
+        <p>验证码在10分钟内有效，10分钟后需要重新激活邮箱</p>
+      `
     }
     let emailR = await EmailCode_col.find({
       email: data.email
