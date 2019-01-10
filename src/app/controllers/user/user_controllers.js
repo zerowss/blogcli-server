@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-02 11:13:45 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-08 17:37:47
+ * @Last Modified time: 2019-01-10 13:50:50
  */
 const bcrypt = require("bcrypt");
 const User_col = require('../../models/user');
@@ -92,9 +92,12 @@ const register = async (ctx)=> {
       return;
     }else{
       let emailInfo = await EmailCode_col.find({
-        username: data.username,
-        email : data.email
+        $and:[
+          {username: data.username},
+          {email : data.email}
+        ]
       })
+      console.log('ss',emailInfo);
       const nowDate = +new Date(); //获取当前时间
       if (emailInfo && emailInfo.codeEmail == data.code ) {
         if (emailInfo.time - nowDate < 600000) {
@@ -133,6 +136,7 @@ const register = async (ctx)=> {
 const getEmailCode = async (ctx)=>{
   let data = ctx.request.body;
   data.time = +new Date();
+  console.log('ss',data);
   data.codeEmail = Tool.randomNumber(6);
   let nameResult = await User_col.find({
     username: data.username
@@ -169,7 +173,7 @@ const getEmailCode = async (ctx)=>{
     if (emailR && emailR.length) {
       await EmailCode_col.update(
         {email: data.email},
-        {codeEmail: data.codeEmail},
+        {codeEmail: data.codeEmail,time: data.time},
         (err, res) => {
           if (err) {
             console.error("Error: " + err);
