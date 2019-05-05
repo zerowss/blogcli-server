@@ -14,7 +14,7 @@ let stateKey = "STATE";
 
 class wechat {
     constructor() {
-        console.log('sss',config);
+        // console.log('sss',config);
     }
 
     async checkToken(ctx){
@@ -27,8 +27,8 @@ class wechat {
         const sha1 = crypto.createHash('sha1');
         sha1.update(arr);
         const result = sha1.digest('hex');
-        console.log('===',data);
-        console.log('---',result);
+        // console.log('===',data);
+        // console.log('---',result);
         
         
         if (result === signature) {
@@ -47,7 +47,7 @@ class wechat {
         const state = Tool.encryption(stateKey);
         url = client.getAuthorizeURLForWebsite('/wechat/getToken', state, 'snsapi_login');
         // ctx.response.redirect(url);
-        console.log('-',url);
+        // console.log('-',url);
         
         ctx.status = 200;
         ctx.body = {

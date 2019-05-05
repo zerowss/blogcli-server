@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-11-01 10:24:52 
  * @Last Modified by: wangss
- * @Last Modified time: 2018-12-06 10:39:46
+ * @Last Modified time: 2019-04-25 14:38:42
  */
 
 const mongoose = require('mongoose');
@@ -16,11 +16,16 @@ const countersSchema = new Schema(
         seq: {
             type: Number,
             default: 0
+        },
+        artSeq:{
+           type: Number,
+           default: 0
         }
     }, 
     {
         collection: 'counters'
     }
 );
+
 
 module.exports = mongoose.model('counters', countersSchema);

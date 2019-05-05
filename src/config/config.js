@@ -2,7 +2,7 @@
  * @Author: wangss 
  * @Date: 2018-10-30 19:55:53 
  * @Last Modified by: wangss
- * @Last Modified time: 2019-01-10 10:47:43
+ * @Last Modified time: 2019-04-16 18:04:07
  */
 
  module.exports = {
@@ -22,5 +22,11 @@
         appID: 'wx801441c80b7bec7d',
         appsecret: '77f8470865fd69ec0d9302913bb1a7aa',
         token: 'zerosnail2019'
+     },
+     qiniu: {
+         AK: 'WhMWfKREDuWXNBBpSHnLOoq-nTFJmBseOz3e6zfV',
+         SK: 'WvbP38rWdmD-OmxGXM4M9ts0MPcCi5gaRjmVwQh4',
+         Bucket: 'wsskangkang123456',
+         Action: 'https://upload-z1.qiniup.com/'
      }
  };
